@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>GOmetta — мессенджер</title>
+  <meta name="description" content="GOmetta — лёгкий мессенджер с чатами, поиском и звонками. Работает как отдельный сайт на GitHub Pages." />
+  <meta name="theme-color" content="#0b0e14" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    try {
+      var saved = JSON.parse(localStorage.getItem('gometta.state.v1') || 'null');
+      var theme = saved && saved.settings && saved.settings.theme;
+      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+
+<!-- ======================= ICONS ======================= -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-logo" viewBox="0 0 32 32">
+    <path d="M4 17h5l3-9 5 16 3-10 2 3h6" />
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="7" /><path d="m20 20-3.4-3.4" />
+  </symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" />
+  </symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24">
+    <path d="M5 4h3l2 5-2.4 1.5a12 12 0 0 0 5.9 5.9L15 14l5 2v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z" />
+  </symbol>
+  <symbol id="i-video" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="12" height="12" rx="3" /><path d="m15 10 6-3.5v11L15 14" />
+  </symbol>
+  <symbol id="i-send" viewBox="0 0 24 24">
+    <path d="M21 3 3 10.4l7 2.9L13 21l8-18Z" /><path d="M10 13.3 21 3" />
+  </symbol>
+  <symbol id="i-telegram" viewBox="0 0 24 24">
+    <path d="M21.4 4.6 18.6 20c-.2 1-1.3 1.3-2 .6l-5-3.9-2.4 2.4c-.3.3-.7.4-1 .1l.6-5 8.7-8.2c.3-.3-.1-.5-.5-.2L6.2 12.6 1.8 11c-1-.3-1-1.1 0-1.5L19.9 3c.9-.3 1.7.3 1.5 1.6Z" />
+  </symbol>
+  <symbol id="i-back" viewBox="0 0 24 24">
+    <path d="M15 5l-7 7 7 7" />
+  </symbol>
+  <symbol id="i-more" viewBox="0 0 24 24">
+    <circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none" />
+    <circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none" />
+  </symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24">
+    <rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+  </symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24">
+    <path d="M4 9v6h3l5 4V5L7 9H4Z" /><path d="M16 9a4 4 0 0 1 0 6" /><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+  </symbol>
+  <symbol id="i-close" viewBox="0 0 24 24">
+    <path d="M6 6l12 12M18 6 6 18" />
+  </symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24">
+    <path d="m5 12.5 4.5 4.5L19 7.5" />
+  </symbol>
+  <symbol id="i-checks" viewBox="0 0 24 24">
+    <path d="m2 12.5 3.5 3.5L14 7.5" /><path d="m10 16 2 2L21 8" />
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24">
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+  </symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24">
+    <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" /><path d="M10 17l5-5-5-5M15 12H3" />
+  </symbol>
+  <symbol id="i-user" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" />
+  </symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24">
+    <path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12Z" />
+  </symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24">
+    <path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13" />
+  </symbol>
+  <symbol id="i-attach" viewBox="0 0 24 24">
+    <path d="M20 11.5 12 19.5a5 5 0 0 1-7-7l8-8a3.5 3.5 0 0 1 5 5l-8 8a2 2 0 0 1-3-3l7-7" />
+  </symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+    <path d="M7 17 17 7M8 7h9v9" />
+  </symbol>
+  <symbol id="i-arrow-down-left" viewBox="0 0 24 24">
+    <path d="M17 7 7 17M16 17H7V8" />
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24">
+    <rect x="4" y="10" width="16" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" />
+  </symbol>
+</svg>
+
+<!-- ======================= AUTH ======================= -->
+<div class="auth" id="authScreen">
+  <span class="auth-glow g1"></span>
+  <span class="auth-glow g2"></span>
+
+  <main class="auth-card">
+    <div class="auth-brand">
+      <span class="logo logo-lg"><svg class="icon"><use href="#i-logo" /></svg></span>
+      <div>
+        <h2>GOmetta</h2>
+        <p>Мессенджер без лишнего</p>
+      </div>
+    </div>
+
+    <section class="step" id="stepTelegram">
+      <h1>Вход через Telegram</h1>
+      <p class="muted">GOmetta работает только через Telegram: номер подтверждается одним касанием — без SMS и кодов.</p>
+
+      <div class="tg-block" id="tgBlock" hidden>
+        <div class="tg-head">
+          <span class="tg-logo"><svg class="icon"><use href="#i-telegram" /></svg></span>
+          <div>
+            <strong id="tgGreeting">Подтверждение номера</strong>
+            <p>Telegram сам передаст ваш номер — вводить его вручную не нужно.</p>
+          </div>
+        </div>
+        <button class="btn btn-telegram" id="tgPhoneBtn" type="button">
+          <svg class="icon"><use href="#i-telegram" /></svg>
+          Подтвердить номер
+        </button>
+        <p class="error" id="tgError" hidden></p>
+      </div>
+
+      <a class="btn btn-telegram" id="tgOpenBot" href="https://t.me/" target="_blank" rel="noopener" hidden>
+        <svg class="icon"><use href="#i-telegram" /></svg>
+        Открыть GOmetta в Telegram
+      </a>
+
+      <p class="fine" id="tgHint">Откройте бота, нажмите «Подтвердить номер» и разрешите доступ к контакту.</p>
+    </section>
+
+    <footer class="auth-foot">
+      <svg class="icon"><use href="#i-lock" /></svg>
+      <span id="authFootText">GOmetta · вход только через Telegram</span>
+    </footer>
+  </main>
+</div>
+
+<!-- ======================= APP ======================= -->
+<div class="app" id="app" hidden>
+  <aside class="sidebar">
+    <header class="sidebar-head">
+      <button class="avatar-btn" id="openSettings" title="Профиль и настройки">
+        <span class="avatar avatar-sm" id="meAvatar">?</span>
+        <span class="sr-only">Профиль и настройки</span>
+      </button>
+      <div class="sidebar-title">
+        <strong>GOmetta</strong>
+        <span class="demo-pill">демо</span>
+      </div>
+      <button class="icon-btn" id="themeToggle" title="Сменить тему" aria-label="Сменить тему">
+        <svg class="icon"><use href="#i-sun" /></svg>
+      </button>
+      <button class="icon-btn" id="newChatBtn" title="Новый чат" aria-label="Новый чат">
+        <svg class="icon"><use href="#i-plus" /></svg>
+      </button>
+    </header>
+
+    <div class="search">
+      <svg class="icon"><use href="#i-search" /></svg>
+      <input id="searchInput" type="search" placeholder="Поиск по чатам" aria-label="Поиск по чатам" autocomplete="off" />
+    </div>
+
+    <nav class="tabs" aria-label="Разделы">
+      <button class="tab active" data-tab="chats">
+        Чаты <span class="tab-badge" id="totalUnread" hidden>0</span>
+      </button>
+      <button class="tab" data-tab="calls">Звонки</button>
+    </nav>
+
+    <div class="list-wrap">
+      <div class="list" id="chatList"></div>
+      <div class="list" id="callsList" hidden></div>
+    </div>
+
+    <footer class="sidebar-foot">
+      <button class="foot-btn" id="settingsFootBtn">
+        <svg class="icon"><use href="#i-settings" /></svg>
+        Настройки
+      </button>
+    </footer>
+  </aside>
+
+  <main class="main">
+    <div class="welcome" id="welcome">
+      <span class="logo logo-xl"><svg class="icon"><use href="#i-logo" /></svg></span>
+      <h1>Выберите чат</h1>
+      <p>Начните переписку слева или создайте новый чат.<br />История сохраняется на этом устройстве.</p>
+      <button class="btn btn-primary" id="newChatWelcome">
+        <svg class="icon"><use href="#i-plus" /></svg>
+        Новый чат
+      </button>
+      <div class="welcome-features">
+        <span><svg class="icon"><use href="#i-chat" /></svg> Сообщения</span>
+        <span><svg class="icon"><use href="#i-phone" /></svg> Звонки</span>
+        <span><svg class="icon"><use href="#i-lock" /></svg> Локально</span>
+      </div>
+    </div>
+
+    <section class="chat" id="chatView" hidden>
+      <header class="chat-head">
+        <button class="icon-btn back" id="backBtn" aria-label="Назад">
+          <svg class="icon"><use href="#i-back" /></svg>
+        </button>
+        <span class="avatar" id="chatAvatar">?</span>
+        <div class="chat-title">
+          <strong id="chatName">Чат</strong>
+          <span id="chatStatus">в сети</span>
+        </div>
+        <div class="chat-actions">
+          <button class="icon-btn" id="callAudio" title="Аудиозвонок" aria-label="Аудиозвонок">
+            <svg class="icon"><use href="#i-phone" /></svg>
+          </button>
+          <button class="icon-btn" id="callVideo" title="Видеозвонок" aria-label="Видеозвонок">
+            <svg class="icon"><use href="#i-video" /></svg>
+          </button>
+          <button class="icon-btn" id="chatMenuBtn" title="Действия с чатом" aria-label="Действия с чатом">
+            <svg class="icon"><use href="#i-more" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="messages" id="messages" aria-live="polite"></div>
+
+      <form class="composer" id="composer">
+        <button type="button" class="icon-btn" id="attachBtn" title="Вложение" aria-label="Вложение">
+          <svg class="icon"><use href="#i-attach" /></svg>
+        </button>
+        <textarea id="messageInput" rows="1" placeholder="Сообщение…" aria-label="Сообщение"></textarea>
+        <button type="submit" class="send-btn" id="sendBtn" aria-label="Отправить">
+          <svg class="icon"><use href="#i-send" /></svg>
+        </button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<!-- ======================= SETTINGS ======================= -->
+<div class="modal" id="settingsModal" hidden>
+  <button class="modal-backdrop" data-close="settings" aria-label="Закрыть"></button>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <header class="modal-head">
+      <h2 id="settingsTitle">Настройки</h2>
+      <button class="icon-btn" data-close="settings" aria-label="Закрыть">
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <div class="profile-card">
+        <span class="avatar avatar-xl" id="settingsAvatar">?</span>
+        <div>
+          <strong id="settingsNameLabel">Вы</strong>
+          <span id="settingsPhoneLabel" class="muted"></span>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Имя</span>
+        <input id="settingsName" maxlength="40" placeholder="Ваше имя" />
+      </label>
+
+      <label class="field">
+        <span>Username</span>
+        <input id="settingsUsername" maxlength="32" placeholder="@username" />
+      </label>
+
+      <div class="setting-row">
+        <div class="setting-text">
+          <strong>Тема</strong>
+          <span class="muted">Оформление интерфейса</span>
+        </div>
+        <div class="segmented" id="themeSwitch">
+          <button type="button" data-theme-value="dark">Тёмная</button>
+          <button type="button" data-theme-value="light">Светлая</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-text">
+          <strong>Уведомления</strong>
+          <span class="muted">Звук и всплывающие окна</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="notifToggle" checked />
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-text">
+          <strong>Данные</strong>
+          <span class="muted">Хранятся в localStorage браузера</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="resetBtn">Сбросить</button>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="logoutBtn">
+          <svg class="icon"><use href="#i-logout" /></svg>
+          Выйти
+        </button>
+        <button class="btn btn-primary" id="saveSettingsBtn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= NEW CHAT ======================= -->
+<div class="modal" id="newChatModal" hidden>
+  <button class="modal-backdrop" data-close="newchat" aria-label="Закрыть"></button>
+  <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="newChatTitle">
+    <header class="modal-head">
+      <h2 id="newChatTitle">Новый чат</h2>
+      <button class="icon-btn" data-close="newchat" aria-label="Закрыть">
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <label class="field">
+        <span>Имя или название</span>
+        <input id="newChatName" maxlength="60" placeholder="Например, Аня" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Телефон (необязательно)</span>
+        <input id="newChatPhone" type="tel" maxlength="20" placeholder="+7 999 123-45-67" autocomplete="off" />
+      </label>
+      <p class="error" id="newChatError" hidden></p>
+      <button class="btn btn-primary" id="createChatBtn">Создать чат</button>
+      <p class="fine" id="newChatHint">Введите номер друга, который уже зарегистрирован в GOmetta. Можно без +7.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= CALL ======================= -->
+<div class="call-overlay" id="callOverlay" hidden>
+  <div class="call-content">
+    <span class="avatar call-avatar" id="callAvatar">?</span>
+    <h2 id="callName">Звонок</h2>
+    <p id="callStatus">Соединение…</p>
+
+    <div class="call-controls">
+      <button class="call-btn" id="callMute" aria-label="Микрофон">
+        <svg class="icon"><use href="#i-mic" /></svg>
+      </button>
+      <button class="call-btn" id="callSpeaker" aria-label="Динамик">
+        <svg class="icon"><use href="#i-speaker" /></svg>
+      </button>
+      <button class="call-btn" id="callVideoToggle" aria-label="Камера">
+        <svg class="icon"><use href="#i-video" /></svg>
+      </button>
+      <button class="call-btn danger" id="callEnd" aria-label="Завершить звонок">
+        <svg class="icon"><use href="#i-phone" /></svg>
+      </button>
+    </div>
+
+    <p class="call-note">Демо-звонок: медиа не передаётся</p>
+  </div>
+</div>
+
+<!-- ======================= CHAT MENU ======================= -->
+<div class="menu" id="chatMenu" hidden>
+  <button data-menu="clear">
+    <svg class="icon"><use href="#i-trash" /></svg>
+    Очистить историю
+  </button>
+  <button data-menu="delete" class="danger">
+    <svg class="icon"><use href="#i-close" /></svg>
+    Удалить чат
+  </button>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
